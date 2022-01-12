@@ -44,8 +44,6 @@ var createTaskEl = function(taskDataObj) {
   listItemEl.className = "task-item";
   listItemEl.setAttribute("data-task-id", taskIdCounter);
 
-  console.log(taskDataObj);
-console.log(taskDataObj.status);
   var taskInfoEl = document.createElement("div");
   taskInfoEl.className = "task-info";
   taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
@@ -53,6 +51,7 @@ console.log(taskDataObj.status);
 
   taskDataObj.id = taskIdCounter;
   tasks.push(taskDataObj);
+  saveTasks();
 
   // create task actions (buttons and select) for task
   var taskActionsEl = createTaskActions(taskIdCounter); 
@@ -119,6 +118,7 @@ var completeEditTask = function(taskName, taskType, taskId) {
   };
 
   alert("Task Updated!");
+  saveTasks();
 
   // remove data attribute from form
   formEl.removeAttribute("data-task-id");
@@ -142,8 +142,7 @@ var taskButtonHandler = function(event) {
 };
 
 var taskStatusChangeHandler = function(event) {
-  console.log(event.target.value);
-
+  
   // find task list item based on event.target's data-task-id attribute
   var taskId = event.target.getAttribute("data-task-id");
 
@@ -165,6 +164,7 @@ var taskStatusChangeHandler = function(event) {
       tasks[i].status = statusValue;
     }
   }
+  saveTasks();
 
 };
 
@@ -210,7 +210,12 @@ var deleteTask = function(taskId) {
 
   // reassign tasks array to be the same as updatedTaskArr
   tasks = updatedTaskArr;
+  saveTasks();
+};
 
+var saveTasks = function() {
+
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 };
 
 // Create a new task
